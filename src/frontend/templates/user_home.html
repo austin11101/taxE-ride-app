@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home - taxE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        /* Footer Styling */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        /* Ensure content above footer doesn't get covered */
+        body {
+            padding-bottom: 60px; /* Height of the footer */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="{{ url_for('user_home') }}">Home</a></li>
+            <li><a href="{{ url_for('account') }}">Account</a></li>
+            <li><a href="{{ url_for('activity') }}">Activity</a></li>
+        </ul>
+    </nav>
+
+    <!-- Destination Search Bar -->
+    <div class="search-container">
+        <input type="text" id="destination-input" placeholder="Enter your destination...">        
+        <button id="search-btn">Search</button><br/>
+        <button id="distance-btn">Get Distance</button><br/>
+        <ul id="suggestion-list" class="suggestion-container"></ul>
+    </div>
+    <p id="distance-result"></p>
+
+    <div class="main-container1">
+        <h2>Welcome, {{ session['email'] }}</h2>
+        <p>You are logged in as a Rider.</p>
+        <a href="{{ url_for('logout') }}" class="btn logout-btn">Logout</a>
+    </div>
+
+    <!-- Map Container -->
+    <div id="map" style="height: 500px; width: 100%; margin-top: 50px;"></div>
+
+    <!-- Custom Script -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 taxE. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+Database Notes 
+sudo mysql -u root -p
+Use taxE
+SHOW TABLES;
+
+#Important Notes :
+
+User Table
+-user_id links each driver to a user account.
+-status keeps track of whether the driver is available, on a trip, or inactive.
+-
+
+Drivers  Table 
+How it works
+-user_id links each driver to a user account.
+-status keeps track of whether the driver is available, on a trip, or inactive.
+-FOREIGN KEY (user_id) REFERENCES users(id):
+-This ensures that the user_id in the drivers table must exist in the users table.
+-It prevents inserting a driver who doesn't have a corresponding user account.
+ ON DELETE CASCADE:
+-If a user account is deleted from the users table, MySQL will automatically delete the  corresponding driver record in the drivers table.
+-This prevents orphaned records (drivers with no associated user).
+
+Rides Table 
+-rider_id: The user who requested the ride (linked to users).
+-driver_id: The driver assigned (linked to drivers).
+-It's nullable because a driver is assigned later.
+ ON DELETE SET NULL: If a driver account is deleted, their rides remain but without an    assigned driver.
+-status: Tracks the ride progress (requested, in progress, completed, etc.).
+-fare: Stores the ride cost once calculated.
+-completed_at: Stores when the ride ends (default NULL).
+
+
+Payment Table 
+-ride_id: Links to the rides table (each ride should have one payment).
+-user_id: The rider making the payment.
+-amount: The fare amount charged.
+-payment_method: Supports card, cash, or wallet.
+-status: Tracks the payment status (pending, completed, failed, refunded).
+-transaction_id: Stores the payment gateway transaction ID (nullable, since cash might not have one).
+-ON DELETE CASCADE: If a ride or user is deleted, their payments are also deleted.
+
+
+Notifications Table 
+-user_id: The user (rider or driver) who will receive the notification.
+-message: The actual notification message.
+-notification_type: Specifies the type of notification (ride_update, payment_confirmation, system_message).
+-status: Tracks whether the notification is unread or read.
+-sent_at: The timestamp when the notification was sent.
+
+
+
+

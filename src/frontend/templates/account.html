@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - taxE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="{{ url_for('user_home') }}">Home</a></li>
+            <li><a href="{{ url_for('account') }}">Account</a></li>
+            <li><a href="{{ url_for('activity') }}">Activity</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container">
+        <h2>Your Account</h2>
+        <p>Manage your personal details and settings here.</p>
+        <!-- Add more account settings later -->
+    </div>
+
+</body>
+</html>
