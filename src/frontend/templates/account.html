@@ -14,13 +14,19 @@
             <li><a href="{{ url_for('user_home') }}">Home</a></li>
             <li><a href="{{ url_for('account') }}">Account</a></li>
             <li><a href="{{ url_for('activity') }}">Activity</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
         </ul>
     </nav>
 
     <div class="main-container">
         <h2>Your Account</h2>
         <p>Manage your personal details and settings here.</p>
-        <!-- Add more account settings later -->
+
+        <div class="profile-info">
+            <p><strong>Name:</strong> {{ name }}</p>
+            <p><strong>Email:</strong> {{ email }}</p>
+            <p><strong>Phone Number:</strong> {{ phone }}</p>
+        </div>
     </div>
 
 </body>

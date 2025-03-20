@@ -99,7 +99,23 @@ def logout():
 
 @app.route('/account')
 def account():
-    return render_template('account.html')
+    if 'user_id' not in session:
+        flash("Please log in first.", "warning")
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    
+    with mysql.connection.cursor() as cur:
+        cur.execute("SELECT name, email, phone FROM users WHERE id = %s", (user_id,))
+        user = cur.fetchone()
+    
+    if user:
+        name, email, phone = user
+        return render_template('account.html', name=name, email=email, phone=phone)
+    
+    flash("User not found.", "danger")
+    return redirect(url_for('login'))
+
 
 @app.route('/activity')
 def activity():
