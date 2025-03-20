@@ -33,6 +33,10 @@
 </head>
 <body>
 
+    <div class="main-container">
+        <h2>Welcome, {{ session['email'] }}</h2>
+    </div>
+
     <!-- Navigation Bar -->
     <nav class="navbar">
         <ul>
@@ -50,7 +54,13 @@
             <button id="search-btn">Search</button><br/>
             <button id="distance-btn">Get Distance</button><br/>
             <ul id="suggestion-list" class="suggestion-container"></ul>
-            <p id="distance-result"></p>
+           
+        </div>
+
+
+        <!-- distance -->
+        <div class="distance-box" id="distance-result">
+            Distance: N/A
         </div>
 
         <!-- Map Container -->

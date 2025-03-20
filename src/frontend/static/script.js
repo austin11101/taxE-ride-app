@@ -78,17 +78,44 @@ document.addEventListener("DOMContentLoaded", function () {
         suggestionList.innerHTML = ''; // Clear the suggestion list
     }
 
+     // Button Click Handler for "Get Distance"
+            document.getElementById('distance-btn').addEventListener('click', function() {
+            const destination = document.getElementById('destination-input').value;
+            if (destination) {
+           getPlaceSuggestions(destination);
+        }
+    });   
     // Function to calculate the distance using the Haversine formula
+// Function to calculate the distance to the destination and highlight the path
     function calculateDistanceToDestination(destLat, destLon) {
         if (!navigator.geolocation) return;
 
         navigator.geolocation.getCurrentPosition(function(position) {
-            const userLat = position.coords.latitude;
-            const userLon = position.coords.longitude;
-            const distance = calculateDistance(userLat, userLon, destLat, destLon);
-            document.getElementById('distance-result').textContent = `Distance to destination: ${distance.toFixed(2)} km`;
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+
+        // Calculate the distance
+        const distance = calculateDistance(userLat, userLon, destLat, destLon);
+        document.getElementById('distance-result').textContent = `Distance to destination: ${distance.toFixed(2)} km`;
+
+        // Highlight the path on the map
+        const latlngs = [
+            [userLat, userLon],
+            [destLat, destLon]
+        ];
+
+        // Remove any existing path before drawing a new one
+        map.eachLayer(function(layer) {
+            if (layer instanceof L.Polyline) {
+                map.removeLayer(layer);
+            }
+        });
+
+        // Draw the path on the map
+        L.polyline(latlngs, { color: 'blue' }).addTo(map);
         });
     }
+
 
     // Function to calculate the distance using the Haversine formula
     function calculateDistance(lat1, lon1, lat2, lon2) {
