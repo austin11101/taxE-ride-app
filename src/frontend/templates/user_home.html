@@ -42,23 +42,21 @@
         </ul>
     </nav>
 
-    <!-- Destination Search Bar -->
-    <div class="search-container">
-        <input type="text" id="destination-input" placeholder="Enter your destination...">        
-        <button id="search-btn">Search</button><br/>
-        <button id="distance-btn">Get Distance</button><br/>
-        <ul id="suggestion-list" class="suggestion-container"></ul>
-    </div>
-    <p id="distance-result"></p>
+    <!-- Parent container for layout control -->
+    <div class="content-wrapper">
+        <!-- Search Container -->
+        <div class="search-container">
+            <input type="text" id="destination-input" placeholder="Enter your destination...">
+            <button id="search-btn">Search</button><br/>
+            <button id="distance-btn">Get Distance</button><br/>
+            <ul id="suggestion-list" class="suggestion-container"></ul>
+            <p id="distance-result"></p>
+        </div>
 
-    <div class="main-container1">
-        <h2>Welcome, {{ session['email'] }}</h2>
-        <p>You are logged in as a Rider.</p>
-        <a href="{{ url_for('logout') }}" class="btn logout-btn">Logout</a>
+        <!-- Map Container -->
+        <div id="map"></div>
     </div>
 
-    <!-- Map Container -->
-    <div id="map" style="height: 500px; width: 100%; margin-top: 50px;"></div>
 
     <!-- Custom Script -->
     <script src="{{ url_for('static', filename='script.js') }}"></script>

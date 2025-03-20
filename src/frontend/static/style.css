@@ -10,14 +10,13 @@ body {
     height: 100vh;
 }
 
-/* Center the Search Bar */
+/* Fixing search-container positioning */
 .search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40vh;  /* Pushes it towards the middle */
-    flex-direction: column;
-    margin-bottom: 20%;
+    width: 50%;
+    text-align: center;
+    margin: 20px auto;  /* Adjust margin to prevent overlap */
+    position: relative; /* Ensure it does not interfere with other elements */
+    z-index: 10; /* Keeps it above the map */
 }
 .suggestion-list{
      display: flex;
@@ -59,7 +58,7 @@ body {
 
 .main-container1 {
     position: absolute;
-    top: 10px; /* Adjust as needed */
+    top: 10px; 
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -169,16 +168,19 @@ a.btn:hover {
     margin-top: 10px;
 }
 
-
-
-/* Position Map at the Bottom */
-.map-container {
-    position: absolute;
-    bottom: 0px;  /* Keeps space for the footer */
-    left: 0;
+.content-wrapper {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;
     width: 100%;
-    height: 40vh; /* Map takes 40% of the screen */
-  
+}
+
+/* Map container styling */
+#map {
+    height: 350px;
+    width: 80%;
+    position: relative; /* Ensure it does not interfere with search-container */
+    margin-top: 20px; /* Adds space below search-container */
 }
 
 /* Footer */
