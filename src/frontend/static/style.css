@@ -23,11 +23,25 @@ body {
     position: relative; /* Ensure it does not interfere with other elements */
     z-index: 10; /* Keeps it above the map */
 }
-.suggestion-list{
-     display: flex;
-    justify-content: center;
-    align-items: center;
 
+.suggestion-container {
+    max-height: 200px;  /* Set the max height for the suggestion box */
+    overflow-y: auto;   /* Enable scrolling if there are more suggestions than the box can show */
+    width: 100%;        /* Make sure it fills the width of the input box */
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.suggestion-container li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-container li:hover {
+    background-color: #f0f0f0;
 }
 
 .search-container input {
@@ -185,7 +199,7 @@ a.btn:hover {
     height: 350px;
     width: 80%;
     position: relative; /* Ensure it does not interfere with search-container */
-    margin-top: 20px; /* Adds space below search-container */
+    margin-top: 200px; /* Adds space below search-container */
 }
 
 /* Footer */
