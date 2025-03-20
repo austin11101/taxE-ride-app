@@ -14,13 +14,25 @@
             <li><a href="{{ url_for('user_home') }}">Home</a></li>
             <li><a href="{{ url_for('account') }}">Account</a></li>
             <li><a href="{{ url_for('activity') }}">Activity</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
         </ul>
     </nav>
 
     <div class="main-container">
         <h2>Your Activity</h2>
-        <p>Here you can view your past rides and transactions.</p>
-        <!-- Add dynamic content later -->
+    
+        <table>
+            <thead>
+                <tr>
+                    <th>Account Creation Date :</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ created_at }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 </body>

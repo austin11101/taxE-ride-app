@@ -119,7 +119,18 @@ def account():
 
 @app.route('/activity')
 def activity():
-    return render_template('activity.html')
+    if 'user_id' not in session:
+        flash("Please log in first.", "warning")
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT created_at FROM users WHERE id = %s", (user_id,))
+    created_at = cur.fetchone()[0]  # Fetch the timestamp
+    cur.close()
+
+    return render_template('activity.html', created_at=created_at)
 
 if __name__ == '__main__':
     app.run(debug=True)
