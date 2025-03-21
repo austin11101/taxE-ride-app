@@ -209,3 +209,75 @@ document.getElementById('signup-form').addEventListener('submit', function(event
         document.getElementById('signup-error').innerText = 'An error occurred. Please try again later.';
     });
 });
+
+// Cache for place suggestions
+let suggestionCache = {};
+
+function getPlaceSuggestions(query) {
+    // Check if the query is in the cache and still valid (for example, within the last 5 minutes)
+    if (suggestionCache[query] && suggestionCache[query].timestamp > Date.now() - 5 * 60 * 1000) {
+        displaySuggestions(suggestionCache[query].data); // Use cached data
+        return;
+    }
+
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1&limit=5`)
+        .then(response => response.json())
+        .then(data => {
+            // Store the data in cache with a timestamp
+            suggestionCache[query] = {
+                data: data,
+                timestamp: Date.now()
+            };
+            clearSuggestions();
+            if (data.length > 0) {
+                displaySuggestions(data);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching place suggestions:', error);
+        });
+}
+
+
+// Cache for distance calculations
+let distanceCache = {};
+
+function calculateDistanceToDestination(destLat, destLon) {
+    const userLocationKey = `${destLat},${destLon}`;
+    
+    // Check if the distance for this destination is cached
+    if (distanceCache[userLocationKey]) {
+        document.getElementById('distance-result').textContent = `Distance to destination: ${distanceCache[userLocationKey].toFixed(2)} km`;
+        return;
+    }
+
+    if (!navigator.geolocation) return;
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+
+        // Calculate the distance
+        const distance = calculateDistance(userLat, userLon, destLat, destLon);
+        document.getElementById('distance-result').textContent = `Distance to destination: ${distance.toFixed(2)} km`;
+
+        // Cache the result
+        distanceCache[userLocationKey] = distance;
+
+        // Highlight the path on the map
+        const latlngs = [
+            [userLat, userLon],
+            [destLat, destLon]
+        ];
+
+        map.eachLayer(function(layer) {
+            if (layer instanceof L.Polyline) {
+                map.removeLayer(layer);
+            }
+        });
+
+        L.polyline(latlngs, { color: 'blue' }).addTo(map);
+    });
+}
+
+
