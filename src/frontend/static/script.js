@@ -29,10 +29,10 @@ document.addEventListener("DOMContentLoaded", function () {
             // Call the function to calculate the distance when a destination is entered
             document.getElementById('destination-input').addEventListener('input', function() {
                 const destination = this.value;
-                if (destination) {
+                if (destination.length >= 4) {  // Only trigger suggestions when 4 or more characters are entered
                     getPlaceSuggestions(destination);
                 } else {
-                    clearSuggestions();
+                    clearSuggestions(); // Clear suggestions when less than 4 characters
                 }
             });
         }, function (error) {
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to get place suggestions using OpenStreetMap's Nominatim API
     function getPlaceSuggestions(query) {
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1&limit=5`)  // Adjust query to fetch limited suggestions
             .then(response => response.json())
             .then(data => {
                 clearSuggestions(); // Clear existing suggestions
@@ -78,44 +78,43 @@ document.addEventListener("DOMContentLoaded", function () {
         suggestionList.innerHTML = ''; // Clear the suggestion list
     }
 
-     // Button Click Handler for "Get Distance"
-            document.getElementById('distance-btn').addEventListener('click', function() {
-            const destination = document.getElementById('destination-input').value;
-            if (destination) {
-           getPlaceSuggestions(destination);
+    // Button Click Handler for "Get Distance"
+    document.getElementById('distance-btn').addEventListener('click', function() {
+        const destination = document.getElementById('destination-input').value;
+        if (destination) {
+            getPlaceSuggestions(destination);
         }
-    });   
+    });
+
     // Function to calculate the distance using the Haversine formula
-// Function to calculate the distance to the destination and highlight the path
     function calculateDistanceToDestination(destLat, destLon) {
         if (!navigator.geolocation) return;
 
         navigator.geolocation.getCurrentPosition(function(position) {
-        const userLat = position.coords.latitude;
-        const userLon = position.coords.longitude;
+            const userLat = position.coords.latitude;
+            const userLon = position.coords.longitude;
 
-        // Calculate the distance
-        const distance = calculateDistance(userLat, userLon, destLat, destLon);
-        document.getElementById('distance-result').textContent = `Distance to destination: ${distance.toFixed(2)} km`;
+            // Calculate the distance
+            const distance = calculateDistance(userLat, userLon, destLat, destLon);
+            document.getElementById('distance-result').textContent = `Distance to destination: ${distance.toFixed(2)} km`;
 
-        // Highlight the path on the map
-        const latlngs = [
-            [userLat, userLon],
-            [destLat, destLon]
-        ];
+            // Highlight the path on the map
+            const latlngs = [
+                [userLat, userLon],
+                [destLat, destLon]
+            ];
 
-        // Remove any existing path before drawing a new one
-        map.eachLayer(function(layer) {
-            if (layer instanceof L.Polyline) {
-                map.removeLayer(layer);
-            }
-        });
+            // Remove any existing path before drawing a new one
+            map.eachLayer(function(layer) {
+                if (layer instanceof L.Polyline) {
+                    map.removeLayer(layer);
+                }
+            });
 
-        // Draw the path on the map
-        L.polyline(latlngs, { color: 'blue' }).addTo(map);
+            // Draw the path on the map
+            L.polyline(latlngs, { color: 'blue' }).addTo(map);
         });
     }
-
 
     // Function to calculate the distance using the Haversine formula
     function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -140,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (destination) {
             getPlaceSuggestions(destination);
         }
+        clearSuggestions(); 
     });
 
     document.getElementById('distance-btn').addEventListener('click', function() {
