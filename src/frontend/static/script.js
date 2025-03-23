@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const cachedSuggestions = localStorage.getItem(`suggestions_${query}`);
         if (cachedSuggestions) {
             console.log("Using cached suggestions for query:", query);
-            displaySuggestions(JSON.parse(cachedSuggestions));
+            displaySuggestions(JSON.parse(cachedSuggestions), query);
             return;
         }
 
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     // Cache suggestions
                     localStorage.setItem(`suggestions_${query}`, JSON.stringify(data));
                     console.log("Suggestions cached for query:", query);
-                    displaySuggestions(data);
+                    displaySuggestions(data, query);
                 }
             })
             .catch(error => {
@@ -81,18 +81,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to display suggestions in a dropdown
-    function displaySuggestions(suggestions) {
+    function displaySuggestions(suggestions, query) {
         console.log("Displaying suggestions:", suggestions);
         const suggestionList = document.getElementById('suggestion-list');
         suggestions.forEach(suggestion => {
-            const listItem = document.createElement('li');
-            listItem.textContent = suggestion.display_name;
-            listItem.addEventListener('click', function() {
-                document.getElementById('destination-input').value = suggestion.display_name;
-                calculateDistanceToDestination(suggestion.lat, suggestion.lon);
-                clearSuggestions();
-            });
-            suggestionList.appendChild(listItem);
+            if (suggestion.display_name.toLowerCase().includes(query.toLowerCase())) {
+                const listItem = document.createElement('li');
+                listItem.textContent = suggestion.display_name;
+                listItem.addEventListener('click', function() {
+                    document.getElementById('destination-input').value = suggestion.display_name;
+                    calculateDistanceToDestination(suggestion.lat, suggestion.lon);
+                    clearSuggestions();
+                });
+                suggestionList.appendChild(listItem);
+            }
         });
     }
 
