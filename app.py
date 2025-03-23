@@ -83,7 +83,7 @@ def signup():
             logging.debug(f"Signup successful for email: {email}")
             flash('Signup successful! You can now log in.', 'success')
             return redirect(url_for('login'))
-        except Exception as e:
+        except IntegrityError as e:
             mysql.connection.rollback()
             logging.error(f"Signup error: {e}")
             flash('Error: Email or Phone already exists!', 'danger')

@@ -36,14 +36,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 .openPopup();
             console.log("User's location marker added");
 
-            // Call the function to calculate the distance when a destination is entered
+            // Debounce input event
+            let debounceTimeout;
             document.getElementById('destination-input').addEventListener('input', function() {
+                clearTimeout(debounceTimeout);
                 const destination = this.value;
-                if (destination.length >= 4) {  // Only trigger suggestions when 4 or more characters are entered
-                    getPlaceSuggestions(destination);
-                } else {
-                    clearSuggestions(); // Clear suggestions when less than 4 characters
-                }
+                debounceTimeout = setTimeout(() => {
+                    if (destination.length >= 4) {  // Only trigger suggestions when 4 or more characters are entered
+                        getPlaceSuggestions(destination);
+                    } else {
+                        clearSuggestions(); // Clear suggestions when less than 4 characters
+                    }
+                }, 300); // 300ms debounce time
             });
         }, function (error) {
             console.error("Error retrieving location:", error);
@@ -59,9 +63,13 @@ document.addEventListener("DOMContentLoaded", function () {
         // Check cache first
         const cachedSuggestions = localStorage.getItem(`suggestions_${query}`);
         if (cachedSuggestions) {
-            console.log("Using cached suggestions for query:", query);
-            displaySuggestions(JSON.parse(cachedSuggestions), query);
-            return;
+            const { data, timestamp } = JSON.parse(cachedSuggestions);
+            const now = new Date().getTime();
+            if (now - timestamp < 3600000) { // 1 hour cache expiry
+                console.log("Using cached suggestions for query:", query);
+                displaySuggestions(data, query);
+                return;
+            }
         }
 
         fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1&limit=5`)  // Adjust query to fetch limited suggestions
@@ -69,8 +77,8 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 clearSuggestions(); // Clear existing suggestions
                 if (data.length > 0) {
-                    // Cache suggestions
-                    localStorage.setItem(`suggestions_${query}`, JSON.stringify(data));
+                    // Cache suggestions with timestamp
+                    localStorage.setItem(`suggestions_${query}`, JSON.stringify({ data, timestamp: new Date().getTime() }));
                     console.log("Suggestions cached for query:", query);
                     displaySuggestions(data, query);
                 }
