@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", function () {
             var lon = position.coords.longitude;
             map.setView([lat, lon], 14); // Adjust zoom level
 
+            // Cache user's coordinates
+            localStorage.setItem('userCoordinates', JSON.stringify({ lat, lon }));
+
             // Remove existing markers before adding a new one
             map.eachLayer(function (layer) {
                 if (layer instanceof L.Marker) {
@@ -44,11 +47,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to get place suggestions using OpenStreetMap's Nominatim API
     function getPlaceSuggestions(query) {
+        // Check cache first
+        const cachedSuggestions = localStorage.getItem(`suggestions_${query}`);
+        if (cachedSuggestions) {
+            displaySuggestions(JSON.parse(cachedSuggestions));
+            return;
+        }
+
         fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1&limit=5`)  // Adjust query to fetch limited suggestions
             .then(response => response.json())
             .then(data => {
                 clearSuggestions(); // Clear existing suggestions
                 if (data.length > 0) {
+                    // Cache suggestions
+                    localStorage.setItem(`suggestions_${query}`, JSON.stringify(data));
                     displaySuggestions(data);
                 }
             })
@@ -97,6 +109,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // Calculate the distance
             const distance = calculateDistance(userLat, userLon, destLat, destLon);
             document.getElementById('distance-result').textContent = `Distance to destination: ${distance.toFixed(2)} km`;
+
+            // Cache the path
+            localStorage.setItem('path', JSON.stringify({ userLat, userLon, destLat, destLon }));
 
             // Highlight the path on the map
             const latlngs = [
