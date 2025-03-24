@@ -3,7 +3,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color:blue;
+    background-color: blue;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,7 +50,6 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-
 .suggestion-container li {
     padding: 10px;
     cursor: pointer;
@@ -82,6 +81,7 @@ body {
 .search-container button:hover {
     background-color: #218838;
 }
+
 .main-container {
     background-color: #fff;
     border: 1px solid #ccc;
@@ -145,7 +145,6 @@ body {
     background-color: #575757;
     border-radius: 5px;
 }
-
 
 /* Form container styles */
 .form-container {
@@ -236,7 +235,55 @@ footer {
     padding: 10px 0;
 }
 
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+    .search-container input {
+        width: 300px;
+    }
 
+    .main-container, .main-container1 {
+        width: 300px;
+    }
 
+    #map {
+        width: 90%;
+    }
+}
 
+@media (max-width: 768px) {
+    .search-container input {
+        width: 250px;
+    }
 
+    .main-container, .main-container1 {
+        width: 250px;
+    }
+
+    #map {
+        width: 100%;
+    }
+
+    .navbar ul li {
+        display: block;
+        margin: 10px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-container input {
+        width: 200px;
+    }
+
+    .main-container, .main-container1 {
+        width: 200px;
+    }
+
+    #map {
+        width: 100%;
+    }
+
+    .navbar ul li {
+        display: block;
+        margin: 10px 0;
+    }
+}
